@@ -1740,4 +1740,129 @@ static NSCalendar *implicitCalendar = nil;
     return implicitCalendar;
 }
 
+#pragma mark - Custom Methods
+
+///*
+//
+//                    ******************** Logic chart ********************
+//
+//    ------------------------------------------------------------------------------------------
+//        Time Interval                           |   Result(the following just is an example)
+//    --------------------------------------------+---------------------------------------------
+//        Error Time                              |           Unkown
+//    --------------------------------------------+---------------------------------------------
+//        < 1 minute                              |           Just now
+//    --------------------------------------------+---------------------------------------------
+//        < 1 hour                                |           24 mins
+//    --------------------------------------------+---------------------------------------------
+//        < 24 hours & <- 24:00(current)          |           10 hrs
+//    --------------------------------------------+---------------------------------------------
+//        < 48 hours & <- 24:00(next)             |       Yesterday at 17:00
+//    --------------------------------------------+---------------------------------------------
+//        > 48 hours & <= 7 days(7 * 24 hours)    |       Sunday at 19:22
+//    --------------------------------------------+---------------------------------------------
+//        > 7 days                                |       March 21 at 08:55
+//    --------------------------------------------+---------------------------------------------
+// */
+//
+- (NSString *)localTimeProcess {
+    int intervalSinceNow = floor([self timeIntervalSinceNow]);
+    NSString *result = @"unkown";
+    
+    if (intervalSinceNow > 0) {
+        return result;
+    }
+    
+    int absIntervalSinceNow = abs(intervalSinceNow);
+    
+    // 判断开始
+    if ([self isToday]) {
+        if (absIntervalSinceNow < 60) {                     // within one munite
+            result = [NSString stringWithFormat:@"Just now"];
+        } else if (absIntervalSinceNow < 3600) {            // within one hour
+            int minuteCount = absIntervalSinceNow/60;
+            result = [NSString stringWithFormat:@"%d mins",minuteCount];
+        } else if (absIntervalSinceNow < 3600 * 24) {       // within one day
+            int hourCount = absIntervalSinceNow / 3600;
+            result = [NSString stringWithFormat:@"%d hrs",hourCount];
+        }
+        return result;
+    }
+    
+    if ([self isYesterday]) {
+        result = [NSString stringWithFormat:@"Yesterday at %ld:%ld",(long)[self hour],(long)[self minute]];
+        return result;
+    }
+    
+    if (absIntervalSinceNow < 3600 * 24 * 7) {   // within one week
+        switch ([self weekday]) {
+            case 1:
+                result = [NSString stringWithFormat:@"Sun at %ld:%ld",(long)[self hour],(long)[self minute]];
+                return result;
+            case 2:
+                result = [NSString stringWithFormat:@"Mon at %ld:%ld",(long)[self hour],(long)[self minute]];
+                return result;
+            case 3:
+                result = [NSString stringWithFormat:@"Tues at %ld:%ld",(long)[self hour],(long)[self minute]];
+                return result;
+            case 4:
+                result = [NSString stringWithFormat:@"Wed at %ld:%ld",(long)[self hour],(long)[self minute]];
+                return result;
+            case 5:
+                result = [NSString stringWithFormat:@"Thur at %ld:%ld",(long)[self hour],(long)[self minute]];
+                return result;
+            case 6:
+                result = [NSString stringWithFormat:@"Fri at %ld:%ld",(long)[self hour],(long)[self minute]];
+                return result;
+            case 7:
+                result = [NSString stringWithFormat:@"Sat at %ld:%ld",(long)[self hour],(long)[self minute]];
+                return result;
+        }
+    }
+    
+    if (absIntervalSinceNow >= 3600 * 24 * 7) {  // outside one week
+        switch ([self month]) {
+            case 1:
+                result = [NSString stringWithFormat:@"Jan %ld, %ld",(long)[self day],(long)[self year]];
+                return result;
+            case 2:
+                result = [NSString stringWithFormat:@"Feb %ld, %ld",(long)[self day],(long)[self year]];
+                return result;
+            case 3:
+                result = [NSString stringWithFormat:@"Mar %ld, %ld",(long)[self day],(long)[self year]];
+                return result;
+            case 4:
+                result = [NSString stringWithFormat:@"Apr %ld, %ld",(long)[self day],(long)[self year]];
+                return result;
+            case 5:
+                result = [NSString stringWithFormat:@"May %ld, %ld",(long)[self day],(long)[self year]];
+                return result;
+            case 6:
+                result = [NSString stringWithFormat:@"June %ld, %ld",(long)[self day],(long)[self year]];
+                return result;
+            case 7:
+                result = [NSString stringWithFormat:@"July %ld, %ld",(long)[self day],(long)[self year]];
+                return result;
+            case 8:
+                result = [NSString stringWithFormat:@"Aug %ld, %ld",(long)[self day],(long)[self year]];
+                return result;
+            case 9:
+                result = [NSString stringWithFormat:@"Sept %ld, %ld",(long)[self day],(long)[self year]];
+                return result;
+            case 10:
+                result = [NSString stringWithFormat:@"Oct %ld, %ld",(long)[self day],(long)[self year]];
+                return result;
+            case 11:
+                result = [NSString stringWithFormat:@"Nov %ld, %ld",(long)[self day],(long)[self year]];
+                return result;
+            case 12:
+                result = [NSString stringWithFormat:@"Dec %ld, %ld",(long)[self day],(long)[self year]];
+                return result;
+        }
+    }
+    
+    return result;
+}
+
+
 @end
