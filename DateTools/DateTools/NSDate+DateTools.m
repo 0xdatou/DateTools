@@ -1803,13 +1803,13 @@ static NSCalendar *implicitCalendar = nil;
                 result = [NSString stringWithFormat:@"Mon at %ld:%ld",(long)[self hour],(long)[self minute]];
                 return result;
             case 3:
-                result = [NSString stringWithFormat:@"Tues at %ld:%ld",(long)[self hour],(long)[self minute]];
+                result = [NSString stringWithFormat:@"Tue at %ld:%ld",(long)[self hour],(long)[self minute]];
                 return result;
             case 4:
                 result = [NSString stringWithFormat:@"Wed at %ld:%ld",(long)[self hour],(long)[self minute]];
                 return result;
             case 5:
-                result = [NSString stringWithFormat:@"Thur at %ld:%ld",(long)[self hour],(long)[self minute]];
+                result = [NSString stringWithFormat:@"Thu at %ld:%ld",(long)[self hour],(long)[self minute]];
                 return result;
             case 6:
                 result = [NSString stringWithFormat:@"Fri at %ld:%ld",(long)[self hour],(long)[self minute]];
